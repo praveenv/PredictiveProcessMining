@@ -8,15 +8,15 @@ import os
 import numpy as np
 
 from time import time
-from keras.callbacks import Callback
+from tensorflow.keras.callbacks import Callback
 from support_modules import support as sup
- 
+
 
 class TimingCallback(Callback):
     def __init__(self, output_folder):
         self.logs=[]
         self.output_folder=output_folder
-        
+
     def on_epoch_begin(self, epoch, logs={}):
         self.starttime=time()
     def on_epoch_end(self, epoch, logs={}):
@@ -32,4 +32,3 @@ class TimingCallback(Callback):
             sup.create_csv_file(data, log_file, mode='a')
         else:
             sup.create_csv_file_header(data, log_file)
-        

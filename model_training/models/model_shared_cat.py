@@ -12,7 +12,7 @@ from keras.layers import Input, Embedding, Concatenate
 from keras.layers.core import Dense
 from keras.layers.recurrent import LSTM
 from keras.optimizers import Nadam, Adam, SGD, Adagrad
-from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 from keras.layers.normalization import BatchNormalization
 
 from support_modules.callbacks import time_callback as tc
@@ -193,4 +193,4 @@ def _training_model(vec, ac_weights, rl_weights, output_folder, args):
               verbose=2,
               callbacks=[early_stopping, model_checkpoint, lr_reducer, cb, clean_models],
               batch_size=batch_size,
-              epochs=500)
+              epochs=10)

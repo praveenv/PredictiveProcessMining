@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Mar 18 17:11:17 2020
 
-@author: Manuel Camargo
-"""
 import numpy as np
 import math
 import datetime

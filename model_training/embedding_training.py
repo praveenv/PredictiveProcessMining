@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Nov 21 21:23:55 2018
 
-@author: Manuel Camargo
-"""
 import os
 import random
 import itertools
@@ -106,7 +102,7 @@ def train_embedded(log_df, ac_index, rl_index, dim_number):
 
     ac_weights = ac_layer.get_weights()[0]
     rl_weights = rl_layer.get_weights()[0]
-    
+
     return ac_weights, rl_weights
 
 

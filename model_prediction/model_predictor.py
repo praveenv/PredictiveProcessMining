@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Mar 17 10:49:28 2020
-
-@author: Manuel Camargo
-"""
 import os
 import json
 
@@ -11,11 +6,11 @@ import pandas as pd
 
 from keras.models import load_model
 import sys
-
-sys.path.insert(0, '/Users/praveen/Desktop/Code/GenerativeLSTM-master/support_modules/readers')
-sys.path.insert(0, '/Users/praveen/Desktop/Code/GenerativeLSTM-master/support_modules')
-sys.path.insert(0, '/Users/praveen/Desktop/Code/GenerativeLSTM-master/model_prediction/analyzers')
-sys.path.insert(0, '/Users/praveen/Desktop/Code/GenerativeLSTM-master/model_prediction')
+path = os.path.abspath(os.getcwd())
+sys.path.insert(0, path + '/support_modules/readers')
+sys.path.insert(0, path + '/support_modules')
+sys.path.insert(0, path + '/model_prediction/analyzers')
+sys.path.insert(0, path + '/model_prediction')
 
 # from support_modules.readers import log_reader as lr
 import log_reader as lr
@@ -25,11 +20,21 @@ import support as sup
 # from support_modules import support as sup
 
 
-# from model_prediction import interfaces as it
-# from model_prediction.analyzers import sim_evaluator as ev
+from model_prediction import interfaces as it
+from model_prediction.analyzers import sim_evaluator as ev
 
 import interfaces as it
 import sim_evaluator as ev
+
+from support_modules.readers import log_reader as lr
+from support_modules import nn_support as nsup
+from support_modules import support as sup
+
+import numpy as np
+import pandas as pd
+from model_training import examples_creator as exc
+from model_training import features_manager as feat
+from model_training import model_loader as mload
 
 
 class ModelPredictor():
@@ -45,22 +50,23 @@ class ModelPredictor():
                                              parms['model_file']))
 
         self.log = self.load_log_test(self.output_route, parms)
-        self.ac_index = dict()  # TODO Evaluar si se dejan aca o en parms
-        self.rl_index = dict()  # TODO Evaluar si se dejan aca o en parms
+        self.ac_index = dict()
+        self.rl_index = dict()
 
         self.samples = dict()
         self.predictions = None
         self.run_num = 0
 
+        # self.preprocess(parms)
         self.execute_predictive_task()
 
     def execute_predictive_task(self):
         # load parameters
         self.load_parameters()
-        print(self.parms)
         # scale features
         self.log = nsup.scale_feature(self.log, 'dur',
                                       self.parms['norm_method'])
+
         # create examples for next event and suffix
         if self.parms['activity'] == 'pred_log':
             self.parms['num_cases'] = len(self.log.caseid.unique())
@@ -106,20 +112,20 @@ class ModelPredictor():
         path = os.path.join(self.output_route,
                             'parameters',
                             'model_parameters.json')
-        # with open(path) as file:
-        #     data = json.load(file)
-        #     if 'activity' in data:
-        #         del data['activity']
-        #     self.parms = {**self.parms, **{k: v for k, v in data.items()}}
-        #     self.parms['dim'] = {k: int(v) for k, v in data['dim'].items()}
-        #     self.parms['max_dur'] = float(data['max_dur'])
-        #     self.parms['index_ac'] = {int(k): v
-        #                               for k, v in data['index_ac'].items()}
-        #     self.parms['index_rl'] = {int(k): v
-        #                               for k, v in data['index_rl'].items()}
-        #     file.close()
-        #     self.ac_index = {v: k for k, v in self.parms['index_ac'].items()}
-        #     self.rl_index = {v: k for k, v in self.parms['index_rl'].items()}
+        with open(path) as file:
+            data = json.load(file)
+            if 'activity' in data:
+                del data['activity']
+            self.parms = {**self.parms, **{k: v for k, v in data.items()}}
+            self.parms['dim'] = {k: int(v) for k, v in data['dim'].items()}
+            self.parms['max_dur'] = float(data['max_dur'])
+            self.parms['index_ac'] = {int(k): v
+                                      for k, v in data['index_ac'].items()}
+            self.parms['index_rl'] = {int(k): v
+                                      for k, v in data['index_rl'].items()}
+            file.close()
+            self.ac_index = {v: k for k, v in self.parms['index_ac'].items()}
+            self.rl_index = {v: k for k, v in self.parms['index_rl'].items()}
 
     def sampling(self, sampler):
         self.samples = sampler.create_samples(self.parms,

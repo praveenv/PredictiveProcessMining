@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Mar 18 10:35:37 2020
 
-@author: Manuel Camargo
-"""
 import numpy as np
 
 from support_modules import support as sup
@@ -110,7 +106,7 @@ class SuffixPredictor():
                     acum_dur.append(np.expm1(time_pred * parms['max_dur']))
                 else:
                     acum_dur.append(np.rint(time_pred * parms['max_dur']))
-    
+
                 time_expected = 0
                 if parms['norm_method'] == 'lognorm':
                     time_expected = np.expm1(np.multiply(

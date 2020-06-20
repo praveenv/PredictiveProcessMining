@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Mar 17 16:24:38 2020
-
-@author: Manuel Camargo
-"""
-
 import sys
+import os
 
-sys.path.insert(0, '/Users/praveen/Desktop/Code/GenerativeLSTM-master/model_prediction')
+path = os.path.abspath(os.getcwd())
+
+sys.path.insert(0, path + '/model_prediction')
 
 import next_event_samples_creator as nesc
 import suffix_samples_creator as ssc

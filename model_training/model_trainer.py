@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Mar 12 15:07:19 2020
 
-@author: Manuel Camargo
-"""
 import os
 import csv
 
@@ -66,7 +62,7 @@ class ModelTrainer():
                                            self.ac_index,
                                            self.rl_index)
         self.examples = seq_creator.vectorize(params['model_type'], params)
-        
+
         # Load embedded matrix
         self.ac_weights = self.load_embedded(
             self.index_ac, 'ac_' + params['file_name'].split('.')[0]+'.emb')

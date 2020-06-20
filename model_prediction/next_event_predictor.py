@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Mar 17 20:35:53 2020
 
-@author: Manuel Camargo
-"""
 import numpy as np
 
 from support_modules import support as sup

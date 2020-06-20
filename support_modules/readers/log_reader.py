@@ -10,7 +10,9 @@ import pandas as pd
 from operator import itemgetter
 
 import sys
-sys.path.insert(0, '/Users/praveen/Desktop/Code/GenerativeLSTM-master/support_modules')
+
+path = os.path.abspath(os.getcwd())
+sys.path.insert(0, path + '/support_modules')
 
 # from support_modules import support as sup
 import support as sup

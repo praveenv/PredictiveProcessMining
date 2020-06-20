@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Nov 21 21:23:55 2018
-
-@author: Manuel Camargo
-"""
 import os
 import csv
 import math
@@ -144,12 +139,12 @@ def vectorization(log_df, ac_index, rl_index, args):
     vec = {'prefixes':dict(), 'next_evt':dict(), 'max_tbtw':max_tbtw}
     # n-gram definition
     vec['prefixes']['x_ac_inp'] = list()
-    vec['prefixes']['x_rl_inp'] = list() 
+    vec['prefixes']['x_rl_inp'] = list()
     vec['prefixes']['xt_inp'] = list()
     vec['next_evt']['y_ac_inp'] = list()
     vec['next_evt']['y_rl_inp'] = list()
     vec['next_evt']['yt_inp'] = list()
-    
+
     for i, _ in enumerate(log_df):
         ac_n_grams = list(ngrams(log_df[i]['ac_order'], args['n_size'],
                                  pad_left=True, left_pad_symbol=0))
@@ -174,7 +169,7 @@ def vectorization(log_df, ac_index, rl_index, args):
         y_ac_inp = ku.to_categorical(y_ac_inp, num_classes=len(ac_index))
         y_rl_inp = ku.to_categorical(y_rl_inp, num_classes=len(rl_index))
         vec['prefixes']['x_ac_inp'].append(x_ac_inp)
-        vec['prefixes']['x_rl_inp'].append(x_rl_inp) 
+        vec['prefixes']['x_rl_inp'].append(x_rl_inp)
         vec['prefixes']['xt_inp'].append(xt_inp)
         vec['next_evt']['y_ac_inp'].append(y_ac_inp)
         vec['next_evt']['y_rl_inp'].append(y_rl_inp)

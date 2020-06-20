@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-"""
-@author: Manuel Camargo
-"""
 import sys
 import getopt
+import os
 
-sys.path.insert(0, '/Users/praveen/Desktop/Code/GenerativeLSTM-master/model_prediction')
+path = os.path.abspath(os.getcwd())
+sys.path.insert(0, path + '/model_prediction')
 
 # from model_prediction import model_predictor as pr
 import model_predictor as pr

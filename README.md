@@ -58,11 +58,3 @@ Once created the environment, you can perform each one of the tasks, specifying 
 ```
 (lstm_env) C:\sc_lstm>python lstm.py -a predict_next -c 20190228_155935509575 -b "model_rd_150 Nadam_22-0.59.h5" -x False
 ```
-## Examples
-
-Models examples and experimental results can be found at <a href="http://kodu.ut.ee/~chavez85/bpm2019/" target="_blank">examples</a>
-## Authors
-
-* **Manuel Camargo**
-* **Marlon Dumas**
-* **Oscar Gonzalez-Rojas**

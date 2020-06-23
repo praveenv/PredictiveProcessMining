@@ -5,6 +5,12 @@ import csv
 
 import pandas as pd
 import numpy as np
+import sys
+import itertools
+path = os.path.abspath(os.getcwd())
+sys.path.insert(0, path + '/support_modules/readers')
+sys.path.insert(0, path + '/support_modules')
+sys.path.insert(0, path + '/model_training')
 
 from support_modules.readers import log_reader as lr
 from support_modules import nn_support as nsup
@@ -41,7 +47,7 @@ class ModelTrainer():
         self.rl_weights = list()
         # Preprocess the event-log
         self.preprocess(params)
-        # Train model
+        #Train model
         m_loader = mload.ModelLoader(params)
         m_loader.train(params['model_type'],
                        self.examples,
@@ -126,6 +132,8 @@ class ModelTrainer():
         train_cases = cases[num_test_cases:]
         df_test = self.log[self.log.caseid.isin(test_cases)]
         df_train = self.log[self.log.caseid.isin(train_cases)]
+        # df_test = self.reorderTestData(df_test,'Resolve ticket','Closed')
+
         key = 'end_timestamp' if one_timestamp else 'start_timestamp'
         self.log_test = (df_test
                          .sort_values(key, ascending=True)
@@ -180,7 +188,26 @@ class ModelTrainer():
                                    os.path.join(self.output_folder,
                                                 'parameters',
                                                 'test_log.csv'))
+    
+    def reorderTestData(self,test_df,task1,task2):
 
+        new_test_df = pd.DataFrame()
+
+        unique_case_ids = test_df['caseid'].unique()
+        print(unique_case_ids)
+
+        for case_id in unique_case_ids:
+            current_case_df = test_df.loc[test_df['caseid'] == case_id]
+            current_case_df = current_case_df.reset_index()
+            if (task1 in current_case_df['task'].values) and (task2 in current_case_df['task'].values):
+                task1_index = current_case_df.index[current_case_df['task'] == task1].tolist()
+                task1_index = task1_index[0]
+                task2_index = current_case_df.index[current_case_df['task'] == task2].tolist()
+                task2_index = task2_index[0]
+                current_case_df.iloc[task1_index], current_case_df.iloc[task2_index] = current_case_df.iloc[task2_index].copy(), current_case_df.iloc[task1_index].copy()
+                new_test_df = new_test_df.append(current_case_df,ignore_index=True)
+
+        return new_test_df
 
 class LogLoader():
 

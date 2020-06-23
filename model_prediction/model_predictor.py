@@ -50,13 +50,15 @@ class ModelPredictor():
                                              parms['model_file']))
 
         self.log = self.load_log_test(self.output_route, parms)
+        self.log = self.reorderTestData(self.log,'Resolve ticket','Closed')
         self.ac_index = dict()
         self.rl_index = dict()
 
         self.samples = dict()
         self.predictions = None
         self.run_num = 0
-
+        print(self.output_route)
+        print(self.log)
         # self.preprocess(parms)
         self.execute_predictive_task()
 
@@ -164,6 +166,26 @@ class ModelPredictor():
         predictions = source_predictions.copy()
         predictions = predictions.drop(columns=['tbtw_raw', 'tbtw'])
         return log.append(predictions, ignore_index=True)
+
+
+    def reorderTestData(self,test_df,task1,task2):
+
+        new_test_df = pd.DataFrame()
+
+        unique_case_ids = test_df['caseid'].unique()
+
+        for case_id in unique_case_ids:
+            current_case_df = test_df.loc[test_df['caseid'] == case_id]
+            current_case_df = current_case_df.reset_index()
+            if (task1 in current_case_df['task'].values) and (task2 in current_case_df['task'].values):
+                task1_index = current_case_df.index[current_case_df['task'] == task1].tolist()
+                task1_index = task1_index[0]
+                task2_index = current_case_df.index[current_case_df['task'] == task2].tolist()
+                task2_index = task2_index[0]
+                current_case_df.iloc[task1_index], current_case_df.iloc[task2_index] = current_case_df.iloc[task2_index].copy(), current_case_df.iloc[task1_index].copy()
+                new_test_df = new_test_df.append(current_case_df,ignore_index=True)
+
+        return new_test_df
 
 
 class EvaluateTask():
